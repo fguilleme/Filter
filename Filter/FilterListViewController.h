@@ -10,10 +10,17 @@
 #import "BlurEffect.h"
 #import "EmbossEffect.h"
 #import "EdgeEffect.h"
+#import "DilateEffect.h"
+#import "BlackAndWhite.h"
+
+#import "OpenCVBlur.h"
+#import "OpenCVCanny.h"
+#import "OpenCVErode.h"
 
 @interface FilterListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
     NSMutableArray *filters;
     NSArray *effects;
+    NSArray *opencv;
 }
 @property(weak) id<chooseFilter> delegate;
 

@@ -22,9 +22,9 @@
 
 -(CIImage*)outputImage {
     static short kernel[] = {
-        0, 1, 0,
-        1, -4, 1,
-        0, 1, 0
+        -1, -1, -1,
+        0, 0, 0,
+        1, 1, 1
     };
     CIImage *im = [super convolveImage:image withKernel:kernel ofSize:3];
     image = nil;
@@ -43,9 +43,7 @@
     return @{ @"inputImage": @"",
               @"CIAttributeFilterDisplayName": @"Edge"
             };
-//    return [NSDictionary dictionaryWithObjects:@[@"", @"Edge"]
-//                                       forKeys:@[@"inputImage", @"CIAttributeFilterDisplayName"]
-//            ];
+
 }
 
 @end

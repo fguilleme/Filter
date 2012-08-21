@@ -16,3 +16,10 @@
 
 -(CIImage *)convolveImage:(CIImage *)image withKernel:(short*)kernel ofSize:(uint32_t)size;
 @end
+
+@interface BaseDilateEffect : CIFilter {
+    CIContext *_context;
+}
+
+-(CIImage *)dilateImage:(CIImage *)image withKernel:(short*)kernel ofSize:(uint32_t)size;
+@end

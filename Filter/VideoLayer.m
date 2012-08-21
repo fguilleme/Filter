@@ -49,12 +49,7 @@
 
 -(void) stopCamera {
     [_session stopRunning];
-//    [_session beginConfiguration];
-//    [_session removeInput:input];
-//    [_session removeOutput:output];
-//    [_session commitConfiguration];
-//    input = nil;
-//    output = nil;
+
     _session = nil;
 }
 
@@ -69,11 +64,11 @@
    
     dispatch_sync(dispatch_get_main_queue(), ^{
         _image = image;
-        [_view setNeedsDisplay];
+        [_view rebuildImage];
     });
 }
 
-- (id)initWithView:(UIView*)view {
+- (id)initWithView:(FilteredImageView*)view {
     self = [super init];
     if (self) {
         _front = YES;
@@ -134,6 +129,7 @@
     }
     else if ([key compare:@"Front"] == 0) {
         return @(_front);
-    }    return nil;
+    }
+    return nil;
 }
 @end

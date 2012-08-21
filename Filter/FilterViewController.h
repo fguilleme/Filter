@@ -23,6 +23,7 @@
     UIImagePickerController *photoPickerController;
     UIPopoverController *picturePopover, *filterListPopover, *layerPopover;
     
+    IBOutlet UIActivityIndicatorView *activityIndicator;
     IBOutlet UIButton *layerButton;
     IBOutlet FilteredImageView *imageView;
     

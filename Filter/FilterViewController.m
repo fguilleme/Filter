@@ -25,7 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+        
     // Build the popover for the image picker
     // ======================================
     photoPickerController = [[UIImagePickerController alloc] init];
@@ -63,6 +63,7 @@
 {
     imageView = nil;
     layerButton = nil;
+    activityIndicator = nil;
     [super viewDidUnload];
 }
 
@@ -91,7 +92,7 @@
 }
 
 -(void)refresh {
-    [imageView setNeedsDisplay];
+    [imageView rebuildImage];
 }
 
 // called when the user taps on the "Layers" button

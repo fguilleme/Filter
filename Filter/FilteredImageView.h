@@ -13,8 +13,10 @@
     CIContext *_context;
     NSInteger _currentLayer;
     UILabel *_emptyLabel;
-    UIImage *_image;
+    UIActivityIndicatorView *_activity;
+    dispatch_semaphore_t sem;
 }
+-(void)rebuildImage;
 
 @property(strong) NSMutableArray *layers;
 @property(strong) UIImageView *imageView;

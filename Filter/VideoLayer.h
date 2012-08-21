@@ -15,9 +15,9 @@
     AVCaptureDeviceInput *input;
     AVCaptureVideoDataOutput *output;
     CIImage *_image;
-    UIView *_view;
+    FilteredImageView *_view;
     bool _mirror;
     bool _front;
 }
--(id)initWithView:(UIView*)view;
+-(id)initWithView:(FilteredImageView*)view;
 @end

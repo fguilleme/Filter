@@ -40,18 +40,27 @@
     [filters removeObject:@"CIAffineClamp"];
     [filters removeObject:@"CIAffineTransform"];
     [filters removeObject:@"CIAffineTile"];
+    [filters removeObject:@"CIColorMatrix"];
     
         // effects is a list of filters
     effects = @[[[BlurEffect alloc] init],
                 [[EmbossEffect alloc] init],
-                [[EdgeEffect alloc] init]
+                [[EdgeEffect alloc] init],
+                [[DilateEffect alloc] init],
+                [[BlackAndWhite alloc] init]
               ];
+    
+    opencv = @[[[OpenCVBlur alloc] init],
+                [[OpenCVCanny alloc] init],
+                [[OpenCVErode alloc] initWithName:@"Erode"],
+                [[OpenCVErode alloc] initWithName:@"Dilate"],
+    ];
     
     [tableView reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -60,8 +69,12 @@
         return 2;
     case 1:
         return [effects count];
-    default:
+    case 2:
+        return [opencv count];
+    case 3:
         return [filters count];
+    default:
+        return 0;
     }
 }
 
@@ -71,6 +84,8 @@
         return @"Images/Video";
     case 1:
         return @"Effects";
+    case 2:
+        return @"OpenCV";
     default:
         return @"Filters";
     }
@@ -96,6 +111,10 @@
         cell.textLabel.textColor = [UIColor brownColor];
         break;
     case 2:
+        cell.textLabel.text = ((CIFilter*)opencv[indexPath.row]).name;
+        cell.textLabel.textColor = [UIColor brownColor];
+        break;
+    case 3:
         cell.textLabel.text = [[[CIFilter filterWithName:filters[indexPath.row]] attributes] objectForKey:@"CIAttributeFilterDisplayName"];
         cell.textLabel.textColor = [UIColor blueColor];
         break;
@@ -116,7 +135,10 @@
             case 1: 
                 [_delegate chooseFilter:effects[indexPath.row]]; 
                 break;
-            case 2:  {
+            case 2:
+                [_delegate chooseFilter:opencv[indexPath.row]];
+                break;
+            case 3:  {
                     CIFilter *filter = [CIFilter filterWithName:filters[indexPath.row]];
                     if (filter != nil) {
                         [filter setDefaults];

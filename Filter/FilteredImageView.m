@@ -14,7 +14,7 @@
 @implementation FilteredImageView
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
-    if ([super initWithCoder:aDecoder]) {
+    if (self = [super initWithCoder:aDecoder]) {
         _context = [CIContext contextWithOptions:nil];
 
             // keep a list of the layers
@@ -34,28 +34,15 @@
         _imageView.clearsContextBeforeDrawing = NO;
         _imageView.backgroundColor = [UIColor grayColor];
         [self addSubview:_imageView];
+        
+        _activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        _activity.center = self.center;
+        _activity.hidden = YES;
+        [self addSubview:_activity];        
+        sem = dispatch_semaphore_create(1);
     }
     return self;
 }
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    CGImageRef cg = [self buildFilteredImage];
-    if (cg == nil ) {
-        _imageView.hidden = YES;
-        _imageView.image = nil;
-        
-        _emptyLabel.hidden = NO;
-    }
-    else {
-        _imageView.image = [UIImage imageWithCGImage:cg];
-        CFRelease(cg);
-        _imageView.hidden = NO;
-        _emptyLabel.hidden = YES;
-    }
- }
 
 -(CGImageRef)buildFilteredImage {
     CGImageRef image = nil;
@@ -100,7 +87,7 @@
                 CGRect r = largest;
                 if (CGRectIsEmpty(r)) r = self.bounds;
                 
-                // we cannot deal with lazi CIImage so convert them to an ImageView size
+                // we cannot deal with lazy CIImage so convert them to an ImageView size
                 top = [top imageByCroppingToRect:r];
                 
             }
@@ -115,6 +102,7 @@
         CGRect rect = self.bounds;
         if (!CGRectIsInfinite(im.extent)) rect = im.extent;
         image = [_context createCGImage:im fromRect:rect];
+        im = nil;
     }
 
     // release all layers
@@ -126,5 +114,34 @@
     stack = nil;
     
     return image;
+}
+
+-(void)rebuildImage {
+    _activity.hidden = NO;
+    if (dispatch_semaphore_wait(sem, DISPATCH_TIME_NOW) == 0) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            CGImageRef cg = [self buildFilteredImage];
+            
+            if (cg != nil) {
+                UIImage *im = [UIImage imageWithCGImage:cg];
+                CFRelease(cg);
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    _imageView.image = im;
+                    _emptyLabel.hidden = YES;
+                    _imageView.hidden = NO;
+                    _activity.hidden = YES;
+                });
+            }
+            else {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    _imageView.image = nil;
+                    _emptyLabel.hidden = NO;
+                    _imageView.hidden = YES;
+                    _activity.hidden = YES;
+                });
+            }
+            dispatch_semaphore_signal(sem);
+        });
+    }
 }
 @end
