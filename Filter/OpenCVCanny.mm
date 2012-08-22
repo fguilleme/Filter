@@ -116,7 +116,7 @@ const int kCannyAperture = 7;
         
         HoughLinesP(output, lines, 1, CV_PI/180, 50, 50, 10 );
         
-        mat = cv::Scalar(0);
+        //mat = cv::Scalar(0);
         
         for (int i = 0; i < lines.size(); i++) {
             cv::Vec4i &line = lines[i];
@@ -124,7 +124,7 @@ const int kCannyAperture = 7;
             cv::Point pt1(line.operator()(0), line.operator()(1));
             cv::Point pt2(line.operator()(2), line.operator()(3));
             
-            cv::line( mat, pt1, pt2, cv::Scalar(255,0,0));
+            cv::line( mat, pt1, pt2, cv::Scalar(255,0,0), 3);
         }
     }
     else {
