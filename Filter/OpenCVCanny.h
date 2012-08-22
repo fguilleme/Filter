@@ -15,5 +15,6 @@
     CIContext *_context;
     CIImage *_image;
     CGFloat _highFilter, _lowFilter;
+    bool _hough;
 }
 @end

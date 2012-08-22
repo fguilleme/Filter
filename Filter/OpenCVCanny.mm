@@ -22,6 +22,7 @@ const int kCannyAperture = 7;
         _context = [CIContext contextWithOptions:nil];
         _lowFilter = 10;
         _highFilter = 100;
+        _hough = NO;
     }
     
     return self;
@@ -47,6 +48,10 @@ const int kCannyAperture = 7;
         NSNumber *number = value;
         _highFilter = [number floatValue];
     }
+    else if ([key compare:@"Hough"] == 0) {
+        NSNumber *number = value;
+        _hough = [number boolValue];
+    }
 }
 
 -(NSDictionary *)attributes {
@@ -63,9 +68,13 @@ const int kCannyAperture = 7;
                                 @"CIAttributeSliderMax":@600,
                                 @"DiscreteSlider": @YES
     };
+    NSDictionary *houghDict = @{ @"CIAttributeFilterDisplayName": @"Hough",
+                                 @"CIAttributeClass": @"NSBool",
+    };
     
     return @{   @"Low filter" : lowDict,
                 @"High filter" : highDict,
+                @"Hough" : houghDict,
                 @"inputImage": @"",
                 @"CIAttributeFilterDisplayName": @"Canny"
     };
@@ -77,6 +86,9 @@ const int kCannyAperture = 7;
     }
     if ([key compare:@"High filter"] == 0) {
         return [NSNumber numberWithFloat:_highFilter];
+    }
+    if ([key compare:@"Hough"] == 0) {
+        return [NSNumber numberWithBool:_hough];
     }
     if ([key compare:@"outputImage"] == 0) {
         return [self outputImage];
@@ -99,26 +111,28 @@ const int kCannyAperture = 7;
               _highFilter * kCannyAperture * kCannyAperture,
               kCannyAperture);
 
-    std::vector<cv::Vec2f> lines;
-//    HoughLines(output, lines, 10, CV_PI/180, 100, 0, 0 );
-//
-//    for (int i = 0; i < lines.size(); i++) {
-//        float rho = lines[i][0], theta = lines[i][1];
-//        cv::Point pt1, pt2;
-//        double a = cos(theta), b = sin(theta);
-//        double x0 = a*rho, y0 = b*rho;
-//        pt1.x = cvRound(x0 + 1000*(-b));
-//        pt1.y = cvRound(y0 + 1000*(a));
-//        pt2.x = cvRound(x0 - 1000*(-b));
-//        pt2.y = cvRound(y0 - 1000*(a));
-//        
-////        CGContextMoveToPoint(ctx, pt1.x, pt1.y);
-////        CGContextAddLineToPoint(ctx, pt2.x, pt2.y);
-//        cv::line( output, pt1, pt2, cv::Scalar(0,0,255), 3, CV_AA);
-//    }
+    if (_hough) {
+        std::vector<cv::Vec4i> lines;
+        
+        HoughLinesP(output, lines, 1, CV_PI/180, 50, 50, 10 );
+        
+        mat = cv::Scalar(0);
+        
+        for (int i = 0; i < lines.size(); i++) {
+            cv::Vec4i &line = lines[i];
+
+            cv::Point pt1(line.operator()(0), line.operator()(1));
+            cv::Point pt2(line.operator()(2), line.operator()(3));
+            
+            cv::line( mat, pt1, pt2, cv::Scalar(255,0,0));
+        }
+    }
+    else {
+        mat = output;
+    }
     CFRelease(cg);
     
-    UIImage *im0 = [UIImage imageWithCVMat:output];
+    UIImage *im0 = [UIImage imageWithCVMat:mat];
     cg = im0.CGImage;
     
     if (cg == nil) return nil;
