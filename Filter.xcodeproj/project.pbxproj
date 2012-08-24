@@ -45,6 +45,7 @@
 		0FF3DA0A13C08D9A00C8D2F6 /* Layer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF3DA0913C08D9A00C8D2F6 /* Layer.m */; };
 		0FF3DA0D13C08E6500C8D2F6 /* ImageLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF3DA0C13C08E6500C8D2F6 /* ImageLayer.m */; };
 		0FF3DA1013C0924100C8D2F6 /* FilterLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF3DA0F13C0924100C8D2F6 /* FilterLayer.m */; };
+		FF3DA1113C094D300C8D2F8 /* OpenCVHough.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF3DA1113C094D300C8D2F7 /* OpenCVHough.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,8 @@
 		0FF3DA0C13C08E6500C8D2F6 /* ImageLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLayer.m; sourceTree = "<group>"; };
 		0FF3DA0E13C0924100C8D2F6 /* FilterLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterLayer.h; sourceTree = "<group>"; };
 		0FF3DA0F13C0924100C8D2F6 /* FilterLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterLayer.m; sourceTree = "<group>"; };
+		FF3DA1113C094D300C8D2F7 /* OpenCVHough.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVHough.mm; sourceTree = "<group>"; };
+		FF3DA1113C094D300C8D2F9 /* OpenCVHough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVHough.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +264,8 @@
 		0FA4F6D815DFE62300D79A9B /* OpenCVEffects */ = {
 			isa = PBXGroup;
 			children = (
+				FF3DA1113C094D300C8D2F9 /* OpenCVHough.h */,
+				FF3DA1113C094D300C8D2F7 /* OpenCVHough.mm */,
 				0FA4F6D915DFE68000D79A9B /* OpenCVBlur.h */,
 				0FA4F6DA15DFE68000D79A9B /* OpenCVBlur.mm */,
 				0FA4F6E415DFFEEF00D79A9B /* OpenCVCanny.h */,
@@ -377,6 +382,7 @@
 				0FA4F6ED15E021AB00D79A9B /* OpenCVErode.mm in Sources */,
 				0FD2B7E915E0F60400D8E778 /* DilateEffect.m in Sources */,
 				0F1C861E15E2A1B9002E8568 /* BlackAndWhite.m in Sources */,
+				FF3DA1113C094D300C8D2F8 /* OpenCVHough.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
