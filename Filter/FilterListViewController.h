@@ -16,6 +16,7 @@
 #import "OpenCVBlur.h"
 #import "OpenCVCanny.h"
 #import "OpenCVErode.h"
+#import "OpenCVHough.h"
 
 @interface FilterListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
     NSMutableArray *filters;

@@ -45,15 +45,17 @@
         // effects is a list of filters
     effects = @[[[BlurEffect alloc] init],
                 [[EmbossEffect alloc] init],
-                [[EdgeEffect alloc] init],
+        //[[EdgeEffect alloc] init],
                 [[DilateEffect alloc] init],
                 [[BlackAndWhite alloc] init]
               ];
     
-    opencv = @[[[OpenCVBlur alloc] init],
+    opencv = @[
+        //[[OpenCVBlur alloc] init],
                 [[OpenCVCanny alloc] init],
-                [[OpenCVErode alloc] initWithName:@"Erode"],
-                [[OpenCVErode alloc] initWithName:@"Dilate"],
+                [[OpenCVHough alloc] init],
+        //[[OpenCVErode alloc] initWithName:@"Erode"],
+        //[[OpenCVErode alloc] initWithName:@"Dilate"],
     ];
     
     [tableView reloadData];
