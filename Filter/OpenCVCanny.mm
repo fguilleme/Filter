@@ -20,9 +20,8 @@ const int kCannyAperture = 7;
     if (self) {
             // Initialization code here.
         _context = [CIContext contextWithOptions:nil];
-        _lowFilter = 10;
-        _highFilter = 100;
-        _hough = NO;
+        _lowFilter = 100;
+        _highFilter = 300;
     }
     
     return self;
@@ -48,10 +47,6 @@ const int kCannyAperture = 7;
         NSNumber *number = value;
         _highFilter = [number floatValue];
     }
-    else if ([key compare:@"Hough"] == 0) {
-        NSNumber *number = value;
-        _hough = [number boolValue];
-    }
 }
 
 -(NSDictionary *)attributes {
@@ -68,13 +63,9 @@ const int kCannyAperture = 7;
                                 @"CIAttributeSliderMax":@600,
                                 @"DiscreteSlider": @YES
     };
-    NSDictionary *houghDict = @{ @"CIAttributeFilterDisplayName": @"Hough",
-                                 @"CIAttributeClass": @"NSBool",
-    };
     
     return @{   @"Low filter" : lowDict,
                 @"High filter" : highDict,
-                @"Hough" : houghDict,
                 @"inputImage": @"",
                 @"CIAttributeFilterDisplayName": @"Canny"
     };
@@ -87,9 +78,6 @@ const int kCannyAperture = 7;
     if ([key compare:@"High filter"] == 0) {
         return [NSNumber numberWithFloat:_highFilter];
     }
-    if ([key compare:@"Hough"] == 0) {
-        return [NSNumber numberWithBool:_hough];
-    }
     if ([key compare:@"outputImage"] == 0) {
         return [self outputImage];
     }
@@ -99,9 +87,7 @@ const int kCannyAperture = 7;
 -(CIImage*)outputImage {
     CGImageRef cg = [_context createCGImage:_image fromRect:_image.extent];
     cv::Mat grayframe, output, mat = [UIImage imageWithCGImage:cg].CVMat;
-    cv::Size sz;
-    sz.height = sz.width = _lowFilter;
-    
+ 
         // Convert captured frame to grayscale
     cv::cvtColor(mat, grayframe, cv::COLOR_RGB2GRAY);
     
@@ -111,28 +97,9 @@ const int kCannyAperture = 7;
               _highFilter * kCannyAperture * kCannyAperture,
               kCannyAperture);
 
-    if (_hough) {
-        std::vector<cv::Vec4i> lines;
-        
-        HoughLinesP(output, lines, 1, CV_PI/180, 50, 50, 10 );
-        
-        //mat = cv::Scalar(0);
-        
-        for (int i = 0; i < lines.size(); i++) {
-            cv::Vec4i &line = lines[i];
-
-            cv::Point pt1(line.operator()(0), line.operator()(1));
-            cv::Point pt2(line.operator()(2), line.operator()(3));
-            
-            cv::line( mat, pt1, pt2, cv::Scalar(255,0,0), 3);
-        }
-    }
-    else {
-        mat = output;
-    }
     CFRelease(cg);
     
-    UIImage *im0 = [UIImage imageWithCVMat:mat];
+    UIImage *im0 = [UIImage imageWithCVMat:output];
     cg = im0.CGImage;
     
     if (cg == nil) return nil;
