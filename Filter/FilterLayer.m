@@ -14,11 +14,8 @@
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
         _filter = f;
         [_filter setDefaults];
-        
-        NSLog(@"Filter %@", [_filter name]);
     }
 
     return self;
@@ -27,7 +24,6 @@
 -(BOOL)setInput:(CIImage *)im {
     NSDictionary   *att = [_filter attributes];
 
-    m_passthrough = im;
     if (att[@"inputImage"]) {
         [_filter setValue:im  forKey:@"inputImage"];
         return YES;
@@ -50,22 +46,7 @@
 }
 
 -(CIImage *)output {
-    CIImage *res;
-
-//    NSLog(@"filter %@ : IN %@", filter.name, filter.inputKeys);
-//    for (NSString *str in filter.inputKeys) {
-//        NSLog(@" %@ - %@", str, [[filter attributes] objectForKey:str]);
-//    }
-//    NSLog(@"OUT = %@", filter.outputKeys);
-    if (self.enabled == NO && m_passthrough != nil)
-        res = m_passthrough;
-    else
-        res = [_filter outputImage];
-    
-    // if the filter fails take the previous image (passthrough)
-    if (res == nil) res = m_passthrough;
-    
-    return res;
+    return [_filter outputImage];
 }
 
 -(NSString *)name {

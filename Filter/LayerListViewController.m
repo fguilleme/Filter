@@ -60,7 +60,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_layers count];
+    return [_layers.layers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -69,7 +69,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
     }
-    Layer *layer = [_layers objectAtIndex:indexPath.row];
+    Layer *layer = [_layers.layers objectAtIndex:indexPath.row];
     cell.textLabel.text = layer.name;
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     return cell;
@@ -83,7 +83,12 @@
 }
 
 - (void)tableView:(UITableView *)tv commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [_layers removeObjectAtIndex:indexPath.row];
+    [_layers lock];
+    Layer *l =[_layers.layers objectAtIndex:indexPath.row];
+    [l finish];
+    [_layers.layers removeObjectAtIndex:indexPath.row];
+    [_layers unlock];
+
     [tv deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
     
     if (_delegate != nil) {
@@ -99,19 +104,21 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tv moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath { 
-    Layer *l =[_layers objectAtIndex:fromIndexPath.row];
-    [_layers removeObjectAtIndex:fromIndexPath.row];
+- (void)tableView:(UITableView *)tv moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    [_layers lock];
+    Layer *l =[_layers.layers objectAtIndex:fromIndexPath.row];
+    [_layers.layers removeObjectAtIndex:fromIndexPath.row];
         
-    if (toIndexPath.row >= [_layers count]) {
-        [_layers addObject:l];
+    if (toIndexPath.row >= [_layers.layers count]) {
+        [_layers.layers addObject:l];
     }
     else {
         NSInteger correction = 0;
         if (fromIndexPath.row < toIndexPath.row) correction = 1;
-        [_layers insertObject:l  atIndex:toIndexPath.row - correction];
+        [_layers.layers insertObject:l  atIndex:toIndexPath.row - correction];
     }
-    
+    [_layers unlock];
+
     if (_delegate != nil) {
         [_delegate refresh];
     }

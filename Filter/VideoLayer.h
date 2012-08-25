@@ -9,15 +9,15 @@
 
 #import "Layer.h"
 #import "FilterViewController.h"
+#import "VideoProviderProtocol.h"
+#import "VideoProvider.h"
 
-@interface VideoLayer : Layer<AVCaptureVideoDataOutputSampleBufferDelegate> {
-    AVCaptureSession *_session;
-    AVCaptureDeviceInput *input;
-    AVCaptureVideoDataOutput *output;
+@interface VideoLayer : Layer<VideoProviderProtocol> {
+    VideoProvider *_provider;
     CIImage *_image;
+    
     FilteredImageView *_view;
-    bool _mirror;
-    bool _front;
+
 }
 -(id)initWithView:(FilteredImageView*)view;
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Layer.h"
+#import "LayerList.h"
 
 @interface FilteredImageView : UIView {
     CIContext *_context;
@@ -18,6 +19,6 @@
 }
 -(void)rebuildImage;
 
-@property(strong) NSMutableArray *layers;
+@property(strong) LayerList *layers;
 @property(strong) UIImageView *imageView;
 @end

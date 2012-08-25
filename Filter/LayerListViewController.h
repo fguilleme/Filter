@@ -11,11 +11,12 @@
 #import "ImageLayer.h"
 #import "FilterLayer.h"
 #import "filterRefresh.h"
+#import "LayerList.h"
 
 @interface LayerListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *tableView;
 }
-@property(strong) NSMutableArray *layers;
+@property(strong) LayerList *layers;
 @property(weak) id<layerChooser,layerAction> delegate;
 
 -(void)reload;

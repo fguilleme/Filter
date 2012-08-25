@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface Layer : NSObject {
-    CIImage *m_passthrough;
 }
 
 @property(strong) NSString *name;
@@ -23,4 +22,6 @@
 -(NSString *)name;
 -(CGRect)extent;
 -(NSDictionary*)attributes;
+
+-(void)finish;
 @end

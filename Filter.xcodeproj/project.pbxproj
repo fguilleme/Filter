@@ -28,6 +28,8 @@
 		0F7BC31815988FB900354301 /* UIColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7BC31715988FB900354301 /* UIColorPicker.m */; };
 		0F8E0A6713C36BE0000C9689 /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0F8E0A6613C36BE0000C9689 /* images.jpeg */; };
 		0F8E0A6A13C36C65000C9689 /* images.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F8E0A6913C36C65000C9689 /* images.png */; };
+		0F94FDB815E8D43E00124C11 /* VideoProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F94FDB715E8D43E00124C11 /* VideoProvider.m */; };
+		0F94FDBD15E90D9200124C11 /* LayerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F94FDBC15E90D9200124C11 /* LayerList.m */; };
 		0FA4F6D615DFE50A00D79A9B /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA4F6D515DFE50A00D79A9B /* opencv2.framework */; };
 		0FA4F6DB15DFE68000D79A9B /* OpenCVBlur.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FA4F6DA15DFE68000D79A9B /* OpenCVBlur.mm */; };
 		0FA4F6E315DFF23800D79A9B /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FA4F6E115DFEAC200D79A9B /* UIImage+OpenCV.mm */; };
@@ -84,6 +86,11 @@
 		0F7BC31715988FB900354301 /* UIColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIColorPicker.m; sourceTree = "<group>"; };
 		0F8E0A6613C36BE0000C9689 /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images.jpeg; sourceTree = "<group>"; };
 		0F8E0A6913C36C65000C9689 /* images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = images.png; sourceTree = "<group>"; };
+		0F94FDB615E8D43E00124C11 /* VideoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoProvider.h; sourceTree = "<group>"; };
+		0F94FDB715E8D43E00124C11 /* VideoProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProvider.m; sourceTree = "<group>"; };
+		0F94FDBA15E8D6CA00124C11 /* VideoProviderProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoProviderProtocol.h; sourceTree = "<group>"; };
+		0F94FDBB15E90D9200124C11 /* LayerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerList.h; sourceTree = "<group>"; };
+		0F94FDBC15E90D9200124C11 /* LayerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerList.m; sourceTree = "<group>"; };
 		0F99A24515DFD98500DFE324 /* Filter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Filter.entitlements; sourceTree = "<group>"; };
 		0FA4F6D515DFE50A00D79A9B /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		0FA4F6D915DFE68000D79A9B /* OpenCVBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVBlur.h; sourceTree = "<group>"; };
@@ -164,6 +171,7 @@
 				0F6DD0CE13BF4E9D00D21F71 /* chooseFilter.h */,
 				0F56A4F913BF701C0049FEE3 /* layerChooser.h */,
 				0FD1E9AC13C0D76B00D72712 /* filterRefresh.h */,
+				0F94FDBA15E8D6CA00124C11 /* VideoProviderProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -283,12 +291,16 @@
 				0FF3DA0913C08D9A00C8D2F6 /* Layer.m */,
 				0FC68690159E6B1E003706C4 /* VideoLayer.h */,
 				0FC68691159E6B1E003706C4 /* VideoLayer.m */,
+				0F94FDB615E8D43E00124C11 /* VideoProvider.h */,
+				0F94FDB715E8D43E00124C11 /* VideoProvider.m */,
 				0FF3DA0B13C08E6500C8D2F6 /* ImageLayer.h */,
 				0FF3DA0C13C08E6500C8D2F6 /* ImageLayer.m */,
 				0FF3DA0E13C0924100C8D2F6 /* FilterLayer.h */,
 				0FF3DA0F13C0924100C8D2F6 /* FilterLayer.m */,
 				0FA4F6D815DFE62300D79A9B /* OpenCVEffects */,
 				0F284AD813C4C94400F006EB /* Effects */,
+				0F94FDBB15E90D9200124C11 /* LayerList.h */,
+				0F94FDBC15E90D9200124C11 /* LayerList.m */,
 			);
 			name = Layers;
 			sourceTree = "<group>";
@@ -383,6 +395,8 @@
 				0FD2B7E915E0F60400D8E778 /* DilateEffect.m in Sources */,
 				0F1C861E15E2A1B9002E8568 /* BlackAndWhite.m in Sources */,
 				FF3DA1113C094D300C8D2F8 /* OpenCVHough.mm in Sources */,
+				0F94FDB815E8D43E00124C11 /* VideoProvider.m in Sources */,
+				0F94FDBD15E90D9200124C11 /* LayerList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

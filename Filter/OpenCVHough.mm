@@ -17,7 +17,6 @@ const int kCannyAperture = 7;
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
         _context = [CIContext contextWithOptions:nil];
         
         _threshold = _mingap = _minlength = 50;

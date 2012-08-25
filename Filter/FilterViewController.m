@@ -67,12 +67,6 @@
     [super viewDidUnload];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return NO;
-}
-
 // called when the user has chosen a picture
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image= [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -82,7 +76,10 @@
 
     // replace the first layer
     ImageLayer *layer = [[ImageLayer alloc] initWithImage:image];
-    [imageView.layers replaceObjectAtIndex:currentLayer withObject:layer];
+    [imageView.layers lock];
+    [imageView.layers.layers replaceObjectAtIndex:currentLayer withObject:layer];
+    [imageView.layers unlock];
+
     [layerListController reload];
    
     [picturePopover dismissPopoverAnimated:NO];
@@ -119,10 +116,12 @@
 // called when the user taps in a filter in the list
 -(void)chooseFilter:(CIFilter *)filter {
     [filterListPopover dismissPopoverAnimated:YES];
-    
-    [imageView.layers addObject:[[FilterLayer alloc] initWithFilter:filter]];
 
-    [layerListController reload];
+        [imageView.layers lock];
+        [imageView.layers.layers addObject:[[FilterLayer alloc] initWithFilter:filter]];
+        [imageView.layers unlock];
+
+        [layerListController reload];
     
     // redraw
     [self refresh];
@@ -135,10 +134,12 @@
 
 -(void)chooseImage {
     [filterListPopover dismissPopoverAnimated:YES];
- 
-    currentLayer = [imageView.layers count];
-    [imageView.layers addObject:[[ImageLayer alloc] initWithImage:nil]];
-    
+
+    [imageView.layers lock];
+    currentLayer = [imageView.layers.layers count];
+    [imageView.layers.layers addObject:[[ImageLayer alloc] initWithImage:nil]];
+    [imageView.layers unlock];
+
     [layerListController reload];
 
     [layerPopover presentPopoverFromRect:layerButton.bounds 
@@ -153,14 +154,19 @@
 }
 
 -(void)chooseVideo {
-    [imageView.layers addObject:[[VideoLayer alloc] initWithView:imageView]];
+    [imageView.layers lock];
+    [imageView.layers.layers addObject:[[VideoLayer alloc] initWithView:imageView]];
+    [imageView.layers unlock];
+
     [layerListController reload];
     [filterListPopover dismissPopoverAnimated:YES];
 }
 
 // called when th user taps on a layer item  in the list
 -(void)editLayer:(int)index {
-    if ([[imageView.layers objectAtIndex:index] class] == [ImageLayer class]) {
+  [imageView.layers lock];
+
+   if ([[imageView.layers.layers objectAtIndex:index] class] == [ImageLayer class]) {
         currentLayer = index;
         [picturePopover presentPopoverFromRect:layerPopover.contentViewController.view.bounds
                                         inView:layerPopover.contentViewController.view
@@ -168,12 +174,13 @@
                                       animated:YES];             
     }
     else {
-        FilterLayer *theLayer = [imageView.layers objectAtIndex:index];
+        FilterLayer *theLayer = [imageView.layers.layers objectAtIndex:index];
         filterDetailViewController *flc = [[filterDetailViewController alloc] initWithLayer:theLayer];
         flc.delegate = self;
         flc.contentSizeForViewInPopover = CGSizeMake(320, 320);
         
         [layerNavigationController pushViewController:flc animated:YES];
     }
+    [imageView.layers unlock];
 }
 @end

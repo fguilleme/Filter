@@ -18,7 +18,7 @@
         _context = [CIContext contextWithOptions:nil];
 
             // keep a list of the layers
-        _layers = [NSMutableArray arrayWithCapacity:16];
+        _layers = [[LayerList alloc] init];
 
         CGRect r = CGRectMake(0, self.bounds.size.height /2, self.bounds.size.width, 72);
         
@@ -38,7 +38,11 @@
         _activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         _activity.center = self.center;
         _activity.hidden = YES;
-        [self addSubview:_activity];        
+        [self addSubview:_activity];
+        
+        _emptyLabel.hidden = NO;
+        _imageView.hidden = YES;
+        
         sem = dispatch_semaphore_create(1);
     }
     return self;
@@ -48,15 +52,19 @@
     CGImageRef image = nil;
     NSMutableArray  *stack = [NSMutableArray arrayWithCapacity:16];
     CGRect largest = CGRectZero;
-    
+
+    [_layers lock];
+
         // find the largest image
-    for (Layer *l in _layers) {
+    for (Layer *l in _layers.layers) {
         if ([l class] == [ImageLayer class] || [l class] == [VideoLayer class]) {
             largest = CGRectUnion(largest, l.extent);
         }
     }
     
-    for (Layer *l in _layers) {
+    for (Layer *l in _layers.layers) {
+        if (l.enabled == NO) continue;
+        
         CIImage *top = nil;
         
         if ([stack count] > 0) top = [stack lastObject];
@@ -106,20 +114,22 @@
     }
 
     // release all layers
-    for (Layer *l in _layers) {
+    for (Layer *l in _layers.layers) {
         [l setAltInput:nil];
         [l setInput:nil];
     }
     [stack removeAllObjects];
     stack = nil;
-    
+
+    [_layers unlock];
+
     return image;
 }
 
 -(void)rebuildImage {
-    _activity.hidden = NO;
     if (dispatch_semaphore_wait(sem, DISPATCH_TIME_NOW) == 0) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        _activity.hidden = NO;
+       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             CGImageRef cg = [self buildFilteredImage];
             
             if (cg != nil) {

@@ -14,10 +14,7 @@
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
-        
         _enabled = YES;
-        m_passthrough = nil;
     }
     return self;
 }
@@ -45,5 +42,8 @@
 
 -(NSDictionary *)attributes {
     return nil;
+}
+
+-(void)finish {
 }
 @end
